@@ -25,7 +25,8 @@ module JIRA
   #   :password           => nil,
   #   :auth_type          => :oauth
   #   :proxy_address      => nil
-  #   :proxy_port         => nil
+  #   :proxy_port         => nil,
+  #   :default_headers    => {}
   #
   # See the JIRA::Base class methods for all of the available methods on these accessor
   # objects.
@@ -52,7 +53,8 @@ module JIRA
       :ssl_verify_mode    => OpenSSL::SSL::VERIFY_PEER,
       :use_ssl            => true,
       :auth_type          => :oauth,
-      :http_debug         => false
+      :http_debug         => false,
+      :default_headers    => {}
     }
 
     def initialize(options={})
@@ -133,7 +135,7 @@ module JIRA
       JIRA::Resource::FieldFactory.new(self)
     end
 
-    def Board 
+    def Board
       JIRA::Resource::BoardFactory.new(self)
     end
 
@@ -211,7 +213,7 @@ module JIRA
     protected
 
       def merge_default_headers(headers)
-        {'Accept' => 'application/json'}.merge(headers)
+        {'Accept' => 'application/json'}.merge(@options[:default_headers]).merge(headers)
       end
 
   end
