@@ -55,4 +55,38 @@ describe JIRA::Resource::User do
       end
     end
   end
+
+  describe "#first" do
+    let(:client) { JIRA::Client.new({ :username => 'foo', :password => 'bar', :auth_type => :basic, site: site }) }
+
+    context "when the client is a cloud instance" do
+      let(:site) { "https://foo.atlassian.net" }
+
+      before do
+        expect(client).to receive(:get)
+          .with("/rest/api/3/user/search?username=_&maxResults=1") { OpenStruct.new(body: '["User1"]') }
+        allow(client).to receive_message_chain(:User, :build).with("users") { [] }
+      end
+
+      it "gets users with maxResults of 1" do
+        expect(client).to receive_message_chain(:User, :build).with("User1")
+        JIRA::Resource::User.first(client)
+      end
+    end
+
+    context "when the client is not a cloud instance" do
+      let(:site) { "https://foo.onprem.com" }
+
+      before do
+        expect(client).to receive(:get)
+          .with("/rest/api/2/user/search?username=@&maxResults=1") { OpenStruct.new(body: '["User1"]') }
+        allow(client).to receive_message_chain(:User, :build).with("users") { [] }
+      end
+
+      it "gets users with maxResults of 1" do
+        expect(client).to receive_message_chain(:User, :build).with("User1")
+        JIRA::Resource::User.first(client)
+      end
+    end
+  end
 end

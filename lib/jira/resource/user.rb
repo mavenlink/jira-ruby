@@ -6,6 +6,7 @@ module JIRA
 
     class User < JIRA::Base
       MAX_RESULTS = 1000
+      MIN_RESULTS = 1
 
       def self.singular_path(client, key, prefix = '/')
         collection_path(client, prefix) + '?username=' + key
@@ -21,7 +22,17 @@ module JIRA
           client.User.build(user)
         end
       end
-    end
 
+      def self.first(client)
+        search_token = client.cloud_instance? ? "_" : "@"
+        rest_base_path = client.cloud_instance? ? "/rest/api/3" : "/rest/api/2"
+        response  = client.get("#{rest_base_path}/user/search?username=#{search_token}&maxResults=#{MIN_RESULTS}")
+        all_users = JSON.parse(response.body)
+
+        all_users.flatten.uniq.map do |user|
+          client.User.build(user)
+        end
+      end
+    end
   end
 end

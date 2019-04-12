@@ -43,4 +43,9 @@ describe JIRA::BaseFactory do
     expect(JIRA::Resource::Foo).to receive(:singular_path).with(client, 'FOO')
     subject.singular_path('FOO')
   end
+
+  it "proxies first to the target class" do
+    expect(JIRA::Resource::Foo).to receive(:first).with(client)
+    subject.first
+  end
 end
