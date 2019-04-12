@@ -1,3 +1,4 @@
+require 'openssl'
 require 'json'
 require 'forwardable'
 require 'ostruct'
@@ -208,6 +209,10 @@ module JIRA
     def request(http_method, path, body = '', headers={})
       puts "#{http_method}: #{path} - [#{body}]" if @http_debug
       @request_client.request(http_method, path, body, headers)
+    end
+
+    def cloud_instance?
+      options[:site].include?("atlassian.net")
     end
 
     protected
