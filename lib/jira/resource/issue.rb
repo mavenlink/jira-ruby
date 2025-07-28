@@ -47,7 +47,7 @@ module JIRA
       has_many :remotelink, :class => JIRA::Resource::Remotelink
 
       def self.all(client)
-        url = client.options[:rest_base_path] + "/search?expand=transitions.fields"
+        url = client.options[:rest_base_path_v3] + '/search/jql?expand=transitions.fields'
         response = client.get(url)
         json = parse_json(response.body)
         json['issues'].map do |issue|
@@ -56,7 +56,7 @@ module JIRA
       end
 
       def self.jql(client, jql, options = {fields: nil, start_at: nil, max_results: nil, expand: nil})
-        url = client.options[:rest_base_path] + "/search?jql=" + CGI.escape(jql)
+        url = client.options[:rest_base_path_v3] + "/search/jql?jql=" + CGI.escape(jql)
 
         url << "&fields=#{options[:fields].map{ |value| CGI.escape(client.Field.name_to_id(value)) }.join(',')}" if options[:fields]
         url << "&startAt=#{CGI.escape(options[:start_at].to_s)}" if options[:start_at]
