@@ -70,8 +70,8 @@ end
 shared_examples "a resource with a collection GET endpoint" do
 
   it "should get the collection" do
-    stub_request(:get, site_url + described_class.collection_path(client)).
-                 to_return(:status => 200, :body => get_mock_from_path(:get))
+      stub_request(:get, described_class.collection_path(client)).
+        to_return(:status => 200, :body => get_mock_from_path(:get))
     collection = build_receiver.all
 
     expect(collection.length).to eq(expected_collection_length)

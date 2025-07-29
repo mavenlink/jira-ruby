@@ -52,5 +52,15 @@ describe JIRA::Resource::Project do
       end
 
     end
+
+    before(:each) do
+      stub_request(:get, "http://foo:bar@localhost:2990/jira/rest/api/2/project")
+        .with(headers: {
+          'Accept'=>'application/json',
+          'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'User-Agent'=>'Ruby'
+        })
+        .to_return(:status => 200, :body => get_mock_from_path(:get), :headers => {})
+    end
   end
 end
