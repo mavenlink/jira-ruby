@@ -3,7 +3,8 @@ require 'spec_helper'
 describe JIRA::Resource::Project do
 
   let(:client) { double("client", :options => {
-                          :rest_base_path => '/jira/rest/api/2'
+                          :rest_base_path => '/jira/rest/api/2',
+                          :rest_base_path_v3 => '/jira/rest/api/3'
                         })
   }
 
