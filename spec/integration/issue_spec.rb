@@ -48,31 +48,15 @@ describe JIRA::Resource::Issue do
       before(:each) do
         stub_request(:get, site_url + "/jira/rest/api/3/search/jql?expand=transitions.fields").
                     to_return(:status => 200, :body => get_mock_response('issue.json'))
-      
-        stub_request(:get, "http://localhost:2990/rest/api/3/search/jql?expand=transitions.fields")
-          .with(headers: {
-            'Accept'=>'application/json',
-            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'Authorization'=>/OAuth .*/, # Use a regex to match any OAuth header
-            'User-Agent'=>'OAuth gem v0.5.14'
-          })
-          .to_return(status: 200, body: get_mock_response('issue.json'), headers: {})
-        stub_request(:get, "http://foo:bar@localhost:2990/rest/api/3/search/jql?expand=transitions.fields")
-                    .with(headers: {
-                    'Accept'=>'application/json',
-                    'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-                    'User-Agent'=>'Ruby'
-        })
-    .to_return(status: 200, body: get_mock_response('issue.json'), headers: {})
-    end
+      end
       it_should_behave_like "a resource with a collection GET endpoint"
     end
     it_should_behave_like "a resource with a DELETE endpoint"
     it_should_behave_like "a resource with a POST endpoint"
     it_should_behave_like "a resource with a PUT endpoint"
     it_should_behave_like "a resource with a PUT endpoint that rejects invalid fields"
-
     describe "errors" do
+      
       before(:each) do
         stub_request(:get,
                     site_url + "/jira/rest/api/2/issue/10002").
@@ -103,22 +87,24 @@ describe JIRA::Resource::Issue do
           "key"=>"SAMPLEPROJECT-13"
         }
       }
+      
       before(:each) do
-        stub_request(:get, "http://foo:bar@localhost:2990/rest/api/3/search/jql?jql=PROJECT%20=%20'SAMPLEPROJECT'")
+        
+        stub_request(:get, "http://foo:bar@localhost:2990/jira/rest/api/3/search/jql?jql=PROJECT%20=%20'SAMPLEPROJECT'")
           .with(headers: {
             'Accept'=>'application/json',
             'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
             'User-Agent'=>'Ruby'
           })
           .to_return(status: 200, body: get_mock_response('issue.json'), headers: {})
-        stub_request(:get, "http://localhost:2990/rest/api/3/search/jql?jql=PROJECT%20=%20'SAMPLEPROJECT'")
+        stub_request(:get, site_url + "/jira/rest/api/3/search/jql?jql=PROJECT%20=%20'SAMPLEPROJECT'")
           .with(headers: {
             'Accept'=>'application/json',
             'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
             'Authorization'=>/OAuth .*/, # Use a regex to match any OAuth header
             'User-Agent'=>'OAuth gem v0.5.14'
     })
-  .to_return(status: 200, body: get_mock_response('issue.json'), headers: {})
+          .to_return(status: 200, body: get_mock_response('issue.json'), headers: {})
         end
       it_should_behave_like "a resource with JQL inputs and a collection GET endpoint"
     end

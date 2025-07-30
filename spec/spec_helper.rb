@@ -1,6 +1,6 @@
 RSpec.configure do |config|
   config.before(:each) do
-    stub_request(:get, "http://foo:bar@localhost:2990/rest/api/3/search/jql?jql=project=%22SAMPLEPROJECT%22")
+    stub_request(:get, "http://foo:bar@localhost:2990/jira/rest/api/3/search/jql?jql=project=%22SAMPLEPROJECT%22")
       .with(headers: {
         'Accept'=>'application/json',
         'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -8,7 +8,7 @@ RSpec.configure do |config|
       })
       .to_return(:status => 200, :body => '{ "issues": [ {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} ] }', :headers => {})
 
-    stub_request(:get, "http://localhost:2990/rest/api/3/search/jql?jql=project=%22SAMPLEPROJECT%22")
+    stub_request(:get, "http://localhost:2990/jira/rest/api/3/search/jql?jql=project=%22SAMPLEPROJECT%22")
       .with(headers: {
         'Accept'=>'application/json',
         'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',

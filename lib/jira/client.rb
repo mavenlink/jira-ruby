@@ -61,6 +61,7 @@ module JIRA
       options = DEFAULT_OPTIONS.merge(options)
       @options = options
       @options[:rest_base_path] = @options[:context_path] + @options[:rest_base_path]
+      @options[:rest_base_path_v3] = @options[:context_path] + @options[:rest_base_path_v3]
 
       case options[:auth_type]
       when :oauth
