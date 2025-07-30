@@ -97,7 +97,7 @@ describe JIRA::Resource::Issue do
 
     allow(response).to receive(:body).and_return('{"issues": {"key":"foo"}}')
     expect(client).to receive(:get)
-      .with('/jira/rest/api/3/search/jql?jql=foo+bar&startAt=1&maxResults=3')
+      .with('/jira/rest/api/3/search/jql?jql=foo+bar&nextPageToken=1&maxResults=3')
       .and_return(response)
     expect(client).to receive(:Issue).and_return(issue)
     expect(issue).to receive(:build).with(["key", "foo"]).and_return('')

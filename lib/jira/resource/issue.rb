@@ -59,7 +59,7 @@ module JIRA
         url = client.options[:rest_base_path_v3] + "/search/jql?jql=" + CGI.escape(jql)
 
         url << "&fields=#{options[:fields].map{ |value| CGI.escape(client.Field.name_to_id(value)) }.join(',')}" if options[:fields]
-        url << "&startAt=#{CGI.escape(options[:start_at].to_s)}" if options[:start_at]
+        url << "&nextPageToken=#{CGI.escape(options[:start_at].to_s)}" if options[:start_at]
         url << "&maxResults=#{CGI.escape(options[:max_results].to_s)}" if options[:max_results]
 
         if options[:expand]
