@@ -45,7 +45,7 @@ describe JIRA::Resource::RapidView do
           :status => 200,
           :body => get_mock_response('rapidview/SAMPLEPROJECT.issues.json')
         )
-        stub_request(:get, "http://localhost:2990/rest/api/3/search/jql?jql=id%20IN(10000,%2010001)%20AND%20sprint%20IS%20NOT%20EMPTY")
+        stub_request(:get, "http://localhost:2990/jira/rest/api/3/search/jql?jql=id%20IN(10000,%2010001)%20AND%20sprint%20IS%20NOT%20EMPTY")
         .with(headers: {
         'Accept'=>'application/json',
         'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -55,7 +55,7 @@ describe JIRA::Resource::RapidView do
       .to_return(status: 200, body: get_mock_response('rapidview/SAMPLEPROJECT.issues.full.json'), headers: {})
         stub_request(
           :get,
-          "http://localhost:2990/rest/api/3/search/jql?jql=id%20IN(10001,%2010000)"
+          "http://localhost:2990/jira/rest/api/3/search/jql?jql=id%20IN(10001,%2010000)"
         ).with(headers: {
           'Accept'=>'application/json',
           'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -65,7 +65,7 @@ describe JIRA::Resource::RapidView do
         .to_return(status: 200, body: get_mock_response('rapidview/SAMPLEPROJECT.issues.full.json'), headers: {})
         stub_request(
           :get,
-          'http://foo:bar@localhost:2990' + '/rest/api/3/search/jql?jql=id IN(10000, 10001)%20AND%20sprint%20IS%20NOT%20EMPTY'
+          'http://foo:bar@localhost:2990' + '/jira/rest/api/3/search/jql?jql=id IN(10000, 10001)%20AND%20sprint%20IS%20NOT%20EMPTY'
         ).to_return(
           :status => 200,
           :body => get_mock_response('rapidview/SAMPLEPROJECT.issues.full.json')
@@ -73,7 +73,7 @@ describe JIRA::Resource::RapidView do
 
         stub_request(
           :get,
-          'http://foo:bar@localhost:2990' + '/rest/api/3/search/jql?jql=id IN(10001, 10000)'
+          'http://foo:bar@localhost:2990' + '/jira/rest/api/3/search/jql?jql=id IN(10001, 10000)'
         ).to_return(
           :status => 200,
           :body => get_mock_response('rapidview/SAMPLEPROJECT.issues.full.json')
