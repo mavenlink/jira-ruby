@@ -70,7 +70,7 @@ module JIRA
         response = client.get(url)
         json = parse_json(response.body)
         result = {}
-        result['next_page_token'] = json[:next_page_token] if json[:next_page_token] rescue nil
+        result['next_page_token'] = json['nextPageToken'] if json['nextPageToken'] rescue nil
         result['issues'] = json['issues'].map do |issue|
           client.Issue.build(issue)
         
