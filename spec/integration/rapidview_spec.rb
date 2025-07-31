@@ -81,9 +81,8 @@ describe JIRA::Resource::RapidView do
 
         subject = client.RapidView.build('id' => 1)
         issues = subject.issues
-        expect(issues.length).to eq(2)
-
-        issues.each do |issue|
+        expect(issues["issues"].length).to eq(2)
+        issues["issues"].each do |issue|
           expect(issue.class).to eq(JIRA::Resource::Issue)
           expect(issue.expanded?).to be_falsey
         end
