@@ -66,7 +66,7 @@ describe JIRA::Resource::Filter do
   end
   let(:jql_attrs) do
     {
-      :startAt => 0,
+      :nextPageToken => 0,
       :maxResults => 50,
       :total => 2,
       :issues => [jql_issue]
@@ -89,9 +89,9 @@ describe JIRA::Resource::Filter do
       with("localhost/search/jql?jql=#{CGI.escape(filter.jql)}").
       and_return(issue_jql_response)
     issues = filter.issues
-    expect(issues).to be_an(Array)
-    expect(issues.size).to eql(1)
+    expect(issues).to be_an(Hash)
+    expect(issues["issues"].size).to eql(1)
     expected_issue = client.Issue.build(JSON.parse(jql_issue.to_json))
-    expect(issues.first.attrs).to eql(expected_issue.attrs)
+    expect(issues["issues"].first.attrs).to eql(expected_issue.attrs)
   end
 end
