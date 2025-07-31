@@ -74,7 +74,7 @@ describe JIRA::Resource::Issue do
     expect(client).to receive(:Issue).and_return(issue)
     expect(issue).to receive(:build).with(["key", "foo"]).and_return('')
 
-    expect(JIRA::Resource::Issue.jql(client,'foo bar')).to eq([''])
+    expect(JIRA::Resource::Issue.jql(client,'foo bar')).to eq({"issues" => [""]})
   end
 
   it "should search an issue with a jql query string and fields" do
@@ -88,7 +88,7 @@ describe JIRA::Resource::Issue do
     expect(client).to receive(:Issue).and_return(issue)
     expect(issue).to receive(:build).with(["key", "foo"]).and_return('')
 
-    expect(JIRA::Resource::Issue.jql(client, 'foo bar', fields: ['foo','bar'])).to eq([''])
+    expect(JIRA::Resource::Issue.jql(client, 'foo bar', fields: ['foo','bar'])).to eq({"issues" => [""]})
   end
 
   it "should search an issue with a jql query string, start at, and maxResults" do
@@ -97,12 +97,12 @@ describe JIRA::Resource::Issue do
 
     allow(response).to receive(:body).and_return('{"issues": {"key":"foo"}}')
     expect(client).to receive(:get)
-      .with('/jira/rest/api/3/search/jql?jql=foo+bar&nextPageToken=1&maxResults=3')
+      .with('/jira/rest/api/3/search/jql?jql=foo+bar&maxResults=3')
       .and_return(response)
     expect(client).to receive(:Issue).and_return(issue)
     expect(issue).to receive(:build).with(["key", "foo"]).and_return('')
 
-    expect(JIRA::Resource::Issue.jql(client,'foo bar', start_at: 1, max_results: 3)).to eq([''])
+    expect(JIRA::Resource::Issue.jql(client,'foo bar', start_at: 1, max_results: 3)).to eq({"issues" => [""]})
   end
 
   it "should search an issue with a jql query string and string expand" do
@@ -116,7 +116,7 @@ describe JIRA::Resource::Issue do
     expect(client).to receive(:Issue).and_return(issue)
     expect(issue).to receive(:build).with(["key", "foo"]).and_return('')
 
-    expect(JIRA::Resource::Issue.jql(client,'foo bar', expand: 'transitions')).to eq([''])
+    expect(JIRA::Resource::Issue.jql(client,'foo bar', expand: 'transitions')).to eq("issues" =>[""])
   end
 
   it "should search an issue with a jql query string and array expand" do
@@ -130,7 +130,7 @@ describe JIRA::Resource::Issue do
     expect(client).to receive(:Issue).and_return(issue)
     expect(issue).to receive(:build).with(["key", "foo"]).and_return('')
 
-    expect(JIRA::Resource::Issue.jql(client,'foo bar', expand: %w(transitions))).to eq([''])
+    expect(JIRA::Resource::Issue.jql(client,'foo bar', expand: %w(transitions))).to eq("issues" =>[""])
   end
 
   it 'should return meta data available for editing an issue' do
