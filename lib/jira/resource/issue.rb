@@ -55,11 +55,11 @@ module JIRA
         end
       end
 
-      def self.jql(client, jql, options = {fields: nil, start_at: nil, max_results: nil, expand: nil})
+      def self.jql(client, jql, options = {fields: nil, nextPageToken: nil, max_results: nil, expand: nil})
         url = client.options[:rest_base_path_v3] + "/search/jql?jql=" + CGI.escape(jql)
 
         url << "&fields=#{options[:fields].map{ |value| CGI.escape(client.Field.name_to_id(value)) }.join(',')}" if options[:fields]
-        url << "&nextPageToken=#{CGI.escape(options[:start_at].to_s)}" if options[:start_at]
+        url << "&nextPageToken=#{CGI.escape(options[:nextPageToken].to_s)}" if options[:nextPageToken]
         url << "&maxResults=#{CGI.escape(options[:max_results].to_s)}" if options[:max_results]
 
         if options[:expand]
@@ -69,9 +69,13 @@ module JIRA
 
         response = client.get(url)
         json = parse_json(response.body)
-        json['issues'].map do |issue|
+        result = {}
+        result['nextPageToken'] = json[:nextPageToken] if json[:nextPageToken]
+        result['issues'] = json['issues'].map do |issue|
           client.Issue.build(issue)
+        
         end
+        result
       end
 
       def editmeta
