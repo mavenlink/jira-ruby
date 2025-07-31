@@ -33,7 +33,7 @@ module JIRA
 
         # Filtering options
         jql << " AND sprint IS NOT EMPTY" unless options[:include_backlog_items] 
-        
+
         parent_issues = client.Issue.jql(jql)["issues"]
         subtask_ids = parent_issues.map { |t| t.subtasks.map { |sub| sub['id'] } }.flatten
 
