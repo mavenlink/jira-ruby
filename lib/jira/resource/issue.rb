@@ -56,8 +56,9 @@ module JIRA
       end
 
       def self.jql(client, jql, options = {fields: nil, next_page_token: nil, max_results: nil, expand: nil})
-        url = options[:url] || client.options[:rest_base_path_v3] + "/search/jql?jql=" + CGI.escape(jql)
-
+        url =  options[:url] || client.options[:rest_base_path_v3]
+        url += "/search/jql?jql=" + CGI.escape(jql)
+        
         url << "&fields=#{options[:fields].map{ |value| CGI.escape(client.Field.name_to_id(value)) }.join(',')}" if options[:fields]
         url << "&nextPageToken=#{CGI.escape(options[:next_page_token].to_s)}" if options[:next_page_token]
         url << "&maxResults=#{CGI.escape(options[:max_results].to_s)}" if options[:max_results]
@@ -78,9 +79,9 @@ module JIRA
       end
 
       def self.jql_v2(client, jql, options = {fields: nil, next_page_token: nil, max_results: nil, expand: nil})
-        url = client.options[:rest_base_path] + "/search/jql?jql=" + CGI.escape(jql)
-        options[url] = url
-        self.jql(client, url, jql, options)
+        url = client.options[:rest_base_path]
+        options[:url] = url
+        self.jql(client, jql, options)
       end
 
 
